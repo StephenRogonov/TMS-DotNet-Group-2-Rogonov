@@ -2,10 +2,11 @@
 using System.IO;
 using System.Text;
 using TMS.Nbrb.Core.Helpers;
+using TMS.Nbrb.Core.Interfaces;
 
 namespace TMS.Nbrb.Core.Services
 {
-    public class FileService
+    public class FileService : IFileService
     {
         public void WriteToFileAsync(string text)
         {
