@@ -18,7 +18,6 @@ namespace TMS.Nbrb.ConsoleApp
             foreach (var item in data)
             {
                 Console.WriteLine("|{0,4}|{1, 14}|{2, 37}|{3, 28}|", item.Cur_ID, item.Cur_Abbreviation, item.Cur_Name, item.Cur_Name_Eng);
-                //Console.WriteLine("|  " + item.Cur_ID+"  | "+item.Cur_Abbreviation +" |  "+ item.Cur_Name + " | " + item.Cur_Name_EngMulti + " |");
             }
 
             Console.WriteLine("_______________________________________________________________________________________");
