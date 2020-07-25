@@ -17,10 +17,6 @@ namespace TMS.Nbrb.Core.Services
 
             return response;
         }
-        private int List<T>()
-        {
-            throw new NotImplementedException();
-        }
         public async Task<Currency> GetAsync(string code)
         {
             var response = await "https://www.nbrb.by/api/exrates/currencies"
