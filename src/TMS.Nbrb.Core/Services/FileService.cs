@@ -8,12 +8,12 @@ namespace TMS.Nbrb.Core.Services
 {
     public class FileService : IFileService
     {
-        public void WriteToFileAsync(string text)
+        public void WriteToFile(string text)
         {
             WriteAsync(text, Constants.path);
         }
 
-        public void WriteToFileAsync(string text, string path)
+        public void WriteToFile(string text, string path)
         {
             WriteAsync(text, path);
         }
@@ -26,7 +26,6 @@ namespace TMS.Nbrb.Core.Services
                 {
                     await sw.WriteLineAsync(text);
                 }
-                Console.WriteLine("Данные успешно записаны в файл.");
             }
             catch (Exception e)
             {
