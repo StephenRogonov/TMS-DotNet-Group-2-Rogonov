@@ -35,5 +35,14 @@ namespace TMS.Nbrb.Core.Services
 
             return response;
         }
+        public async Task<IEnumerable<Dynamics>> GetRatesAsync(string code)
+        {
+            var response = await "https://www.nbrb.by/api/exrates/rates/dynamics"
+                .AppendPathSegment(code)
+                .SetQueryParams(new { startDate = DateTime.Now.AddDays(-7).ToString("yyyy-M-d"), endDate = DateTime.Now.ToString("yyyy-M-d") })
+                .GetJsonAsync<List<Dynamics>>();
+
+            return response;
+        }
     }
 }

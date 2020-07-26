@@ -12,5 +12,6 @@ namespace TMS.Nbrb.Core.Interfaces
         Task<Currency> GetAsync(string code);
         Task<IEnumerable<Currency>> GetAllAsync();
         Task<Rate> GetRateAsync(string code);
+        Task<IEnumerable<Dynamics>> GetRatesAsync(string code);
     }
 }
