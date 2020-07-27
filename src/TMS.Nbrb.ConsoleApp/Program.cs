@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading;
 using TMS.Nbrb.Core.Interfaces;
 using TMS.Nbrb.Core.Manager;
 using TMS.Nbrb.Core.Services;
@@ -8,31 +10,48 @@ namespace TMS.Nbrb.ConsoleApp
 {
     class Program
     {
-        static IRequestService requestService = new RequestService();
-        static IFileService fileService = new FileService();
+        static readonly IRequestService requestService = new RequestService();
+        static readonly IFileService fileService = new FileService();
 
         static void Main(string[] args)
         {
-            var data = requestService.GetAllAsync().GetAwaiter().GetResult();
-            Console.WriteLine("_______________________________________________________________________________________");
-            Console.WriteLine("| ID | Abbreviation |            Currency Name            |     Multilanguage Name     |");
-            Console.WriteLine("_______________________________________________________________________________________");
-
-            foreach (var item in data)
+            Console.Title = "NBRB Converter v.1.0";
+            const string welcome = "Welcome to NBRB Converter v.1.0\n\n";
+            foreach (char c in welcome)
             {
-                Console.WriteLine("|{0,4}|{1, 14}|{2, 37}|{3, 28}|", item.Cur_ID, item.Cur_Abbreviation, item.Cur_Name, item.Cur_Name_Eng);
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.Write(c);
+                Thread.Sleep(30);
+                Console.ResetColor();
             }
 
-            Console.WriteLine("_______________________________________________________________________________________");
+            var dateTime = DateTime.Today;
+            Console.WriteLine("List of current currencies {0:dd/MM/yyyy}", dateTime);
+            requestService.RequestTable(requestService);
 
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Conversion");
+            Console.WriteLine("\nConversion");
             Console.ResetColor();
 
             Console.WriteLine("Enter currency abbreviation:");
-            var abbreviation = Console.ReadLine();
-            var code = data.FirstOrDefault(x => x.Cur_Abbreviation.ToLower() == abbreviation.ToLower()).Cur_ID;
-            Conversion(code);
+            while (true)
+            {
+                var abbreviation = Console.ReadLine();
+
+                Regex regex = new Regex(@"[\d!#/., ]");
+                MatchCollection matches = regex.Matches(abbreviation);
+                if (matches.Count == 0 & abbreviation.Length == 3)
+                {
+                    var allCurrencies = requestService.GetAllAsync().GetAwaiter().GetResult();
+                    var code = allCurrencies.FirstOrDefault(x => x.Cur_Abbreviation.ToLower() == abbreviation.ToLower()).Cur_ID;
+                    Conversion(code);
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("The entered abbreviation is not correct, please check and try again");
+                }
+            }
 
             Console.WriteLine("\nEnter currency ID (numeric value only) to export the exchange rate dynamics during the past week.\nPress any other key to skip.\n");
             var currCode = Console.ReadLine();
@@ -54,7 +73,7 @@ namespace TMS.Nbrb.ConsoleApp
         public static void Conversion(int code)
         {
             var coefficient = requestService.GetRateAsync(code.ToString()).GetAwaiter().GetResult().Cur_OfficialRate;
-            Console.WriteLine("Enter amount, BYN:");
+            Console.WriteLine("Enter amount to convert to BYN:");
             var amount = Console.ReadLine();
             CurrencyConversion.Conversion(Convert.ToInt32(amount), coefficient);
         }
