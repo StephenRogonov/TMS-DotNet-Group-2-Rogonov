@@ -14,17 +14,17 @@ namespace TMS.Nbrb.Core.Services
     {
         public async Task<IEnumerable<Currency>> GetAllAsync()
         {
-            var response = await Constants.URL
-               .GetJsonAsync<List<Currency>>();
-            response = response.Where(x => x.Cur_DateEnd > DateTime.Now).ToList();
+            var response = await Constants.Url
+                .AppendPathSegments("exrates", "currencies")
+                .GetJsonAsync<List<Currency>>();
 
-            return response;
+            return response.Where(x => x.Cur_DateEnd > DateTime.Now).ToList();
         }
 
         public async Task<Currency> GetAsync(string code)
         {
-            var response = await Constants.URL
-                .AppendPathSegment(code)
+            var response = await Constants.Url
+                .AppendPathSegments("exrates", "currencies", code)
                 .GetJsonAsync<Currency>();
 
             return response;
@@ -32,8 +32,8 @@ namespace TMS.Nbrb.Core.Services
 
         public async Task<Rate> GetRateAsync(string code)
         {
-            var response = await "https://www.nbrb.by/api/exrates/rates"
-                .AppendPathSegment(code)
+            var response = await Constants.Url
+                .AppendPathSegments("exrates", "rates", code)
                 .GetJsonAsync<Rate>();
 
             return response;
@@ -41,8 +41,8 @@ namespace TMS.Nbrb.Core.Services
 
         public async Task<IEnumerable<Dynamics>> GetRatesAsync(string code)
         {
-            var response = await "https://www.nbrb.by/api/exrates/rates/dynamics"
-                .AppendPathSegment(code)
+            var response = await Constants.Url
+                .AppendPathSegments("exrates", "rates", "dynamics", code)
                 .SetQueryParams(new { startDate = DateTime.Now.AddDays(-7).ToString("yyyy-M-d"), endDate = DateTime.Now.ToString("yyyy-M-d") })
                 .GetJsonAsync<List<Dynamics>>();
 

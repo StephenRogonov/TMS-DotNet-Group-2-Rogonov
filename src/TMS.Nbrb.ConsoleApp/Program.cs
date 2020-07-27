@@ -13,7 +13,7 @@ namespace TMS.Nbrb.ConsoleApp
         static readonly IRequestService requestService = new RequestService();
         static readonly IFileService fileService = new FileService();
 
-        static void Main(string[] args)
+        static void Main()
         {
             Console.Title = "NBRB Converter v.1.0";
             const string welcome = "Welcome to NBRB Converter v.1.0\n\n";
@@ -27,7 +27,7 @@ namespace TMS.Nbrb.ConsoleApp
 
             var dateTime = DateTime.Today;
             Console.WriteLine("List of current currencies {0:dd/MM/yyyy}", dateTime);
-            requestService.RequestTable(requestService);
+            requestService.RequestTable(requestService).GetAwaiter().GetResult();
 
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\nConversion");
@@ -56,20 +56,22 @@ namespace TMS.Nbrb.ConsoleApp
             Console.WriteLine("\nEnter currency ID (numeric value only) to export the exchange rate dynamics during the past week.\nPress any other key to skip.\n");
             var currCode = Console.ReadLine();
 
-            int i = 0;
-            if (int.TryParse(currCode, out i))
+            if (int.TryParse(currCode, out int i))
             {
                 var currency = requestService.GetAsync(currCode).GetAwaiter().GetResult();
                 var header = currency.Cur_Name_Eng + " dynamics for " + currency.Cur_Scale + $" over the past week {DateTime.Now.AddDays(-7):dd-MM-yyyy} - {DateTime.Now:dd-MM-yyyy} is:";
                 var dynamics = requestService.GetRatesAsync(currCode).GetAwaiter().GetResult();
-                fileService.WriteToFile(header);
+                fileService.WriteToFileAsync(header).GetAwaiter().GetResult();
                 foreach (var item in dynamics)
                 {
-                    fileService.WriteToFile(item.Date.ToString("dd-MM-yyyy") + " - " + item.Cur_OfficialRate);
+                    fileService.WriteToFileAsync(item.Date.ToString("dd-MM-yyyy") + " - " + item.Cur_OfficialRate).GetAwaiter().GetResult();
                 }
                 Console.WriteLine("Data is successfully added to file.");
             }
+
+            Console.ReadKey();
         }
+
         public static void Conversion(int code)
         {
             var coefficient = requestService.GetRateAsync(code.ToString()).GetAwaiter().GetResult().Cur_OfficialRate;
