@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
-using TMS.Nbrb.Core.Interfaces;
 using TMS.Nbrb.Core.Manager;
-using TMS.Nbrb.Core.Services;
 
 namespace TMS.Nbrb.ConsoleApp
 {
     class Program
     {
-        static readonly IRequestService requestService = new RequestService();
-        static readonly IFileService fileService = new FileService();
+        static readonly CurrenciesTable table = new CurrenciesTable();
+        static readonly CurrencyConversion conversion = new CurrencyConversion();
+        static readonly DynamicsExport export = new DynamicsExport();
 
         static void Main()
         {
@@ -25,59 +22,58 @@ namespace TMS.Nbrb.ConsoleApp
                 Console.ResetColor();
             }
 
-            var dateTime = DateTime.Today;
-            Console.WriteLine("List of current currencies {0:dd/MM/yyyy}", dateTime);
-            requestService.RequestTable(requestService).GetAwaiter().GetResult();
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("\nConversion");
-            Console.ResetColor();
-
-            Console.WriteLine("Enter currency abbreviation:");
             while (true)
             {
-                var abbreviation = Console.ReadLine();
+                ShowMenu();
+                int.TryParse(Console.ReadLine(), out int userInput);
+                switch (userInput)
+                {
+                    case 1:
+                        {
+                            table.ShowCurrencies();
+                        }
+                        break;
 
-                Regex regex = new Regex(@"[\d!#/., ]");
-                MatchCollection matches = regex.Matches(abbreviation);
-                if (matches.Count == 0 & abbreviation.Length == 3)
-                {
-                    var allCurrencies = requestService.GetAllAsync().GetAwaiter().GetResult();
-                    var code = allCurrencies.FirstOrDefault(x => x.Cur_Abbreviation.ToLower() == abbreviation.ToLower()).Cur_ID;
-                    Conversion(code);
-                    break;
+                    case 2:
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("\nConversion.");
+                            Console.ResetColor();
+                            conversion.Conversion();
+                        }
+                        break;
+
+                    case 3:
+                        {
+                            export.FileExport();
+                        }
+                        break;
+
+                    case 4:
+                        {
+                            Environment.Exit(0);
+                        }
+                        break;
+
+                    default:
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Action not found.");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        break;
                 }
-                else
-                {
-                    Console.WriteLine("The entered abbreviation is not correct, please check and try again");
-                }
+                Console.WriteLine();
             }
-
-            Console.WriteLine("\nEnter currency ID (numeric value only) to export the exchange rate dynamics during the past week.\nPress any other key to skip.\n");
-            var currCode = Console.ReadLine();
-
-            if (int.TryParse(currCode, out int i))
-            {
-                var currency = requestService.GetAsync(currCode).GetAwaiter().GetResult();
-                var header = currency.Cur_Name_Eng + " dynamics for " + currency.Cur_Scale + $" over the past week {DateTime.Now.AddDays(-7):dd-MM-yyyy} - {DateTime.Now:dd-MM-yyyy} is:";
-                var dynamics = requestService.GetRatesAsync(currCode).GetAwaiter().GetResult();
-                fileService.WriteToFileAsync(header).GetAwaiter().GetResult();
-                foreach (var item in dynamics)
-                {
-                    fileService.WriteToFileAsync(item.Date.ToString("dd-MM-yyyy") + " - " + item.Cur_OfficialRate).GetAwaiter().GetResult();
-                }
-                Console.WriteLine("Data is successfully added to file.");
-            }
-
-            Console.ReadKey();
         }
 
-        public static void Conversion(int code)
+        public static void ShowMenu()
         {
-            var coefficient = requestService.GetRateAsync(code.ToString()).GetAwaiter().GetResult().Cur_OfficialRate;
-            Console.WriteLine("Enter amount to convert to BYN:");
-            var amount = Console.ReadLine();
-            CurrencyConversion.Conversion(Convert.ToInt32(amount), coefficient);
-        }
+            Console.WriteLine("What would you like to do? Select desired option:");
+            Console.WriteLine("1. Show all actual currencies for today.");
+            Console.WriteLine("2. Currency converter to BYN.");
+            Console.WriteLine("3. Currency dynamics over the past weeek export.");
+            Console.WriteLine("4. Exit.");
+        }        
     }
 }

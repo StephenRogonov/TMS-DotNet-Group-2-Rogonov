@@ -2,6 +2,9 @@
 
 namespace TMS.Nbrb.Core.Models
 {
+    /// <summary>
+    /// Currency rate properties.
+    /// </summary>
     public class Rate
     {
         public int Cur_ID { get; set; }

@@ -2,6 +2,9 @@
 
 namespace TMS.Nbrb.Core.Models
 {
+    /// <summary>
+    /// Currency dynamics properties.
+    /// </summary>
     public class Dynamics
     {
         public int Cur_ID { get; set; }

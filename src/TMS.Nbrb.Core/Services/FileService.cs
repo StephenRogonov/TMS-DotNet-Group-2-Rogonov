@@ -7,11 +7,12 @@ using TMS.Nbrb.Core.Interfaces;
 
 namespace TMS.Nbrb.Core.Services
 {
+    /// <inheritdoc cref="IFileService"/>
     public class FileService : IFileService
     {
         public async Task WriteToFileAsync(string text)
         {
-            await WriteAsync(text, Constants.Path);
+            await WriteAsync(text, Constants.FileName);
         }
 
         public async Task WriteToFileAsync(string text, string path)
