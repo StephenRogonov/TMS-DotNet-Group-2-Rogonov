@@ -6,9 +6,9 @@ namespace TMS.Nbrb.ConsoleApp
 {
     class Program
     {
-        static readonly CurrenciesTable table = new CurrenciesTable();
-        static readonly CurrencyConversion conversion = new CurrencyConversion();
-        static readonly DynamicsExport export = new DynamicsExport();
+        private static readonly CurrenciesTable table = new CurrenciesTable();
+        private static readonly CurrencyConversion conversion = new CurrencyConversion();
+        private static readonly DynamicsExport export = new DynamicsExport();
 
         static void Main()
         {
@@ -30,7 +30,7 @@ namespace TMS.Nbrb.ConsoleApp
                 {
                     case 1:
                         {
-                            table.ShowCurrencies();
+                            table.ShowCurrenciesAsync().GetAwaiter().GetResult();
                         }
                         break;
 
@@ -39,13 +39,13 @@ namespace TMS.Nbrb.ConsoleApp
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("\nConversion.");
                             Console.ResetColor();
-                            conversion.Conversion();
+                            conversion.ConversionAsync().GetAwaiter().GetResult();
                         }
                         break;
 
                     case 3:
                         {
-                            export.FileExport();
+                            export.FileExportAsync().GetAwaiter().GetResult();
                         }
                         break;
 
@@ -67,7 +67,7 @@ namespace TMS.Nbrb.ConsoleApp
             }
         }
 
-        public static void ShowMenu()
+        private static void ShowMenu()
         {
             Console.WriteLine("What would you like to do? Select desired option:");
             Console.WriteLine("1. Show all actual currencies for today.");

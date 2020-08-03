@@ -11,13 +11,13 @@ namespace TMS.Nbrb.Core.Interfaces
         /// Write to file.
         /// </summary>
         /// <param name="text">Text.</param>
-        public Task WriteToFileAsync(string text);
+        Task WriteToFileAsync(string text);
 
         /// <summary>
         /// Write to file.
         /// </summary>
         /// <param name="text">Text.</param>
         /// <param name="path">Path.</param>
-        public Task WriteToFileAsync(string text, string path);
+        Task WriteToFileAsync(string text, string path);
     }
 }

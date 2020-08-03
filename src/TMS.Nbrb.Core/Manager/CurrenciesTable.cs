@@ -10,17 +10,18 @@ namespace TMS.Nbrb.Core.Manager
     /// </summary>
     public class CurrenciesTable
     {
-        static readonly IRequestService requestService = new RequestService();
-        public void ShowCurrencies()
+        private readonly IRequestService _requestService;
+
+        public CurrenciesTable()
+        {
+            _requestService = new RequestService();
+        }
+
+        public async Task ShowCurrenciesAsync()
         {
             var dateTime = DateTime.Today;
             Console.WriteLine("List of current currencies {0:dd/MM/yyyy}", dateTime);
-            RequestTable(requestService).GetAwaiter().GetResult();
-        }
-
-        async Task RequestTable(IRequestService requestService)
-        {
-            var allCurrencies = await requestService.GetAllAsync();
+            var allCurrencies = await _requestService.GetAllAsync();
             Console.WriteLine(new string('-', 88));
             Console.WriteLine("| ID | Abbreviation |            Currency Name            |     Multilanguage Name     |");
             Console.WriteLine(new string('-', 88));

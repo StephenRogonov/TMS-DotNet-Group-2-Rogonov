@@ -35,7 +35,5 @@ namespace TMS.Nbrb.Core.Interfaces
         /// <param name="code">Currency code.</param>
         /// <returns>Currency rates.</returns>
         Task<IEnumerable<Dynamics>> GetDynamicsAsync(string code);
-
-                
     }
 }
