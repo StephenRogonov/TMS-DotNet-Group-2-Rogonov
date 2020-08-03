@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMS.Nbrb.ConsoleApp", "src\TMS.Nbrb.ConsoleApp\TMS.Nbrb.ConsoleApp.csproj", "{4FA02DF4-6816-47E0-99EA-F5C4D926DEBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMS.Nbrb.Core", "src\TMS.Nbrb.Core\TMS.Nbrb.Core.csproj", "{608AE2D9-5373-43E4-90B9-8A55B854313E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4FA02DF4-6816-47E0-99EA-F5C4D926DEBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FA02DF4-6816-47E0-99EA-F5C4D926DEBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FA02DF4-6816-47E0-99EA-F5C4D926DEBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FA02DF4-6816-47E0-99EA-F5C4D926DEBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{608AE2D9-5373-43E4-90B9-8A55B854313E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{608AE2D9-5373-43E4-90B9-8A55B854313E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{608AE2D9-5373-43E4-90B9-8A55B854313E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{608AE2D9-5373-43E4-90B9-8A55B854313E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E4F6A5C5-1939-4B51-9426-F1B831E3A2D7}
+	EndGlobalSection
+EndGlobal
